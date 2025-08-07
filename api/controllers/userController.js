@@ -1,5 +1,6 @@
 import User from '../models/userModel.js'
 import bcryptjs from 'bcryptjs';
+import {errorHandler} from '../utils/error.js'
 
 export const updateUser = async (req, res, next) => {
   if (req.user.id !== req.params.id) return next(errorHandler(401, 'You can only update your own account!'));
@@ -19,8 +20,12 @@ export const updateUser = async (req, res, next) => {
       }
     }, { new: true })
 
+    // if (!updateUser) {
+    //   return next(errorHandler(404, 'User not found!'));
+    // }
+
     const { password, ...rest } = updateUser._doc;
-    return (200).json(rest);
+    return res.status(200).json(rest);
 
   } catch (error) {
     next(error)
